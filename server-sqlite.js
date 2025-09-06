@@ -16,7 +16,27 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Initialize SQLite database
-const db = new Database('campaign-manager.db');
+const dbPath = process.env.NODE_ENV === 'production' 
+  ? path.join(process.cwd(), 'data', 'campaign-manager.db')
+  : 'campaign-manager.db';
+
+// Ensure data directory exists in production
+if (process.env.NODE_ENV === 'production') {
+  const fs = require('fs');
+  const dataDir = path.join(process.cwd(), 'data');
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+}
+
+let db;
+try {
+  db = new Database(dbPath);
+  console.log('Database connected successfully');
+} catch (error) {
+  console.error('Database connection failed:', error);
+  process.exit(1);
+}
 
 // Create tables
 db.exec(`
@@ -102,8 +122,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Database: SQLite (campaign-manager.db)`);
+  console.log(`Database: SQLite (${dbPath})`);
+}).on('error', (err) => {
+  console.error('Server startup failed:', err);
+  process.exit(1);
 });
