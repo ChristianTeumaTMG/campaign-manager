@@ -3,8 +3,25 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
-const Database = require('better-sqlite3');
+const fs = require('fs');
+
+// Load environment variables
 require('dotenv').config();
+
+// Add startup logging
+console.log('🚀 Starting Campaign Manager Server...');
+console.log('📦 Node.js version:', process.version);
+console.log('📁 Working directory:', process.cwd());
+console.log('🌍 Environment:', process.env.NODE_ENV || 'development');
+
+let Database;
+try {
+  Database = require('better-sqlite3');
+  console.log('✅ better-sqlite3 loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load better-sqlite3:', error.message);
+  process.exit(1);
+}
 
 const campaignRoutes = require('./routes/campaigns-sqlite');
 const scriptRoutes = require('./routes/scripts');
@@ -105,12 +122,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 // Serve the main HTML file
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  try {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  } catch (error) {
+    console.error('Error serving index.html:', error);
+    res.status(500).send('Error loading application');
+  }
 });
 
 // Error handling middleware
@@ -122,12 +149,25 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+// Process error handling
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
+
+// Start server
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🗄️  Database: SQLite (${dbPath})`);
   console.log(`📁 Working directory: ${process.cwd()}`);
   console.log(`🔧 Railway environment: ${process.env.RAILWAY_ENVIRONMENT || 'not set'}`);
+  console.log(`✅ Server started successfully!`);
 }).on('error', (err) => {
   console.error('❌ Server startup failed:', err);
   console.error('❌ Error details:', err.message);

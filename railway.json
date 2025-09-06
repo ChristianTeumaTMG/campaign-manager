@@ -6,10 +6,10 @@
       "providers": ["nodejs"],
       "phases": {
         "setup": {
-          "nixPkgs": ["python3", "gcc", "g++", "make"]
+          "nixPkgs": ["python3", "gcc", "g++", "make", "pkg-config"]
         },
         "install": {
-          "cmds": ["npm ci"]
+          "cmds": ["npm ci --production=false"]
         },
         "build": {
           "cmds": ["npm run build"]
@@ -20,6 +20,8 @@
   "deploy": {
     "startCommand": "node server-sqlite.js",
     "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
+    "restartPolicyMaxRetries": 10,
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 100
   }
 }
