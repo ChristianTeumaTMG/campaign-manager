@@ -2,13 +2,12 @@
   "name": "campaign-manager",
   "version": "1.0.0",
   "description": "Campaign management system with script injection and tracking",
-  "main": "server.js",
+  "main": "server-sqlite.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "build": "cd client && npm run build",
-    "install-client": "cd client && npm install",
-    "heroku-postbuild": "npm run install-client && npm run build"
+    "start": "node server-sqlite.js",
+    "dev": "nodemon server-sqlite.js",
+    "build": "echo 'No build step needed - using HTML frontend'",
+    "heroku-postbuild": "echo 'No build step needed - using HTML frontend'"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
