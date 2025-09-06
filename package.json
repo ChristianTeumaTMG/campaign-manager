@@ -7,7 +7,8 @@
     "start": "node server-sqlite.js",
     "dev": "nodemon server-sqlite.js",
     "build": "echo 'No build step needed - using HTML frontend'",
-    "heroku-postbuild": "echo 'No build step needed - using HTML frontend'"
+    "heroku-postbuild": "echo 'No build step needed - using HTML frontend'",
+    "railway": "node server-sqlite.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

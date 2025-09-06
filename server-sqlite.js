@@ -13,7 +13,7 @@ const reportRoutes = require('./routes/reports-sqlite');
 const eventRoutes = require('./routes/events-sqlite');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || process.env.RAILWAY_PORT || 5000;
 
 // Initialize SQLite database
 const dbPath = process.env.NODE_ENV === 'production' 
@@ -123,10 +123,14 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Database: SQLite (${dbPath})`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🗄️  Database: SQLite (${dbPath})`);
+  console.log(`📁 Working directory: ${process.cwd()}`);
+  console.log(`🔧 Railway environment: ${process.env.RAILWAY_ENVIRONMENT || 'not set'}`);
 }).on('error', (err) => {
-  console.error('Server startup failed:', err);
+  console.error('❌ Server startup failed:', err);
+  console.error('❌ Error details:', err.message);
+  console.error('❌ Stack trace:', err.stack);
   process.exit(1);
 });
