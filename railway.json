@@ -12,11 +12,15 @@
           "cmds": [
             "rm -rf node_modules client/node_modules 2>/dev/null || true",
             "npm cache clean --force 2>/dev/null || true",
-            "npm install --production=false --no-optional"
+            "npm install --production=false --no-optional --prefer-offline",
+            "cd client && rm -f package-lock.json && npm install --legacy-peer-deps --prefer-offline"
           ]
         },
         "build": {
-          "cmds": ["npm run build"]
+          "cmds": [
+            "cd client && npm run build",
+            "rm -rf public/* && cp -r client/build/* public/"
+          ]
         }
       }
     }

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Build script for Railway deployment
+# Optimized build script for Railway deployment
 set -e
 
-echo "🚀 Starting build process..."
+echo "🚀 Starting optimized build process..."
 
 # Check if we're in the right directory
 if [ ! -f "package.json" ]; then
@@ -11,38 +11,29 @@ if [ ! -f "package.json" ]; then
     exit 1
 fi
 
-# Clean up any problematic cache directories
+# Clean up cache directories (minimal cleanup for speed)
 echo "🧹 Cleaning up cache directories..."
-# More aggressive approach for Docker environments
-rm -rf node_modules/.cache 2>/dev/null || true
-rm -rf client/node_modules/.cache 2>/dev/null || true
-rm -rf .npm 2>/dev/null || true
-rm -rf ~/.npm 2>/dev/null || true
+rm -rf node_modules/.cache client/node_modules/.cache 2>/dev/null || true
 
-# Install root dependencies
+# Install root dependencies with caching
 echo "📦 Installing root dependencies..."
-npm install --production=false --no-optional
+npm ci --production=false --no-optional --prefer-offline
 
 # Check if client directory exists
 if [ ! -d "client" ]; then
     echo "❌ Error: client directory not found."
-    echo "📁 Current directory contents:"
-    ls -la
-    echo "📁 Looking for client directory..."
-    find . -name "client" -type d 2>/dev/null || echo "No client directory found"
     exit 1
 fi
 
-# Install client dependencies
+# Install client dependencies with caching
 echo "📦 Installing client dependencies..."
 cd client
-rm -rf node_modules/.cache 2>/dev/null || true
-rm -rf package-lock.json 2>/dev/null || true
-npm install --legacy-peer-deps
+rm -f package-lock.json
+npm install --legacy-peer-deps --prefer-offline
 
-# Build the React app
+# Build the React app with optimizations
 echo "🔨 Building React app..."
-npm run build
+GENERATE_SOURCEMAP=false npm run build
 
 # Check if build was successful
 if [ ! -d "build" ]; then
