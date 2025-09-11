@@ -4,17 +4,17 @@
   "description": "Campaign management system with script injection and tracking",
   "main": "server-sqlite.js",
   "scripts": {
-    "start": "node server-sqlite.js",
-    "dev": "nodemon server-sqlite.js",
-    "build": "echo 'No build step needed - using HTML frontend'",
-    "heroku-postbuild": "echo 'No build step needed - using HTML frontend'",
-    "railway": "node server-sqlite.js"
+    "start": "node server-minimal.js",
+    "start:full": "node server-sqlite.js",
+    "dev": "nodemon server-minimal.js",
+    "build": "./build.sh",
+    "heroku-postbuild": "npm run build",
+    "railway": "node server-minimal.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "better-sqlite3": "^12.2.0",
     "cors": "^2.8.5",
-    "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
@@ -25,11 +25,14 @@
     "mongoose": "^8.0.3",
     "morgan": "^1.10.0",
     "sqlite3": "^5.1.7",
-    "better-sqlite3": "^12.2.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "keywords": [
     "campaign",

@@ -132,3 +132,4 @@ Set these in your hosting platform:
 - **Render:** `https://your-app-name.onrender.com`
 - **Vercel:** `https://your-app-name.vercel.app`
 - **Netlify:** `https://your-app-name.netlify.app`
+
