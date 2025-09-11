@@ -9,7 +9,11 @@
           "nixPkgs": ["python3", "gcc", "g++", "make", "pkg-config"]
         },
         "install": {
-          "cmds": ["rm -rf node_modules/.cache 2>/dev/null || true", "npm ci --production=false"]
+          "cmds": [
+            "rm -rf node_modules client/node_modules 2>/dev/null || true",
+            "npm cache clean --force 2>/dev/null || true",
+            "npm install --production=false"
+          ]
         },
         "build": {
           "cmds": ["npm run build"]

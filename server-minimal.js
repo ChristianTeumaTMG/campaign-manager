@@ -43,7 +43,57 @@ app.get('/api/test', (req, res) => {
 });
 
 app.get('/api/campaigns', (req, res) => {
-  res.json([]);
+  res.json({ data: [] });
+});
+
+// Add more API endpoints that the React app expects
+app.get('/api/reports/overview', (req, res) => {
+  res.json({ 
+    data: {
+      totalCampaigns: 0,
+      totalClicks: 0,
+      totalConversions: 0,
+      conversionRate: 0,
+      revenue: 0
+    }
+  });
+});
+
+app.get('/api/reports/campaigns/:id', (req, res) => {
+  res.json({ 
+    data: {
+      campaignId: req.params.id,
+      stats: {
+        clicks: 0,
+        conversions: 0,
+        revenue: 0
+      }
+    }
+  });
+});
+
+app.post('/api/campaigns', (req, res) => {
+  res.json({ 
+    data: {
+      _id: 'temp-id',
+      ...req.body,
+      createdAt: new Date().toISOString()
+    }
+  });
+});
+
+app.put('/api/campaigns/:id', (req, res) => {
+  res.json({ 
+    data: {
+      _id: req.params.id,
+      ...req.body,
+      updatedAt: new Date().toISOString()
+    }
+  });
+});
+
+app.delete('/api/campaigns/:id', (req, res) => {
+  res.json({ message: 'Campaign deleted successfully' });
 });
 
 // Serve static files

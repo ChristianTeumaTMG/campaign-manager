@@ -8,6 +8,7 @@
     "start:full": "node server-sqlite.js",
     "dev": "nodemon server-minimal.js",
     "build": "./build.sh",
+    "build:railway": "./build-railway.sh",
     "heroku-postbuild": "npm run build",
     "railway": "node server-minimal.js"
   },
