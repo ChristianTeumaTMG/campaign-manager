@@ -26,6 +26,10 @@ npm install --production=false --no-optional
 # Check if client directory exists
 if [ ! -d "client" ]; then
     echo "❌ Error: client directory not found."
+    echo "📁 Current directory contents:"
+    ls -la
+    echo "📁 Looking for client directory..."
+    find . -name "client" -type d 2>/dev/null || echo "No client directory found"
     exit 1
 fi
 
