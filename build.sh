@@ -11,13 +11,16 @@ if [ ! -f "package.json" ]; then
     exit 1
 fi
 
-# Clean up cache directories (minimal cleanup for speed)
+# Clean up cache directories aggressively for Docker environments
 echo "🧹 Cleaning up cache directories..."
 rm -rf node_modules/.cache client/node_modules/.cache 2>/dev/null || true
+rm -rf .npm ~/.npm 2>/dev/null || true
+find node_modules -name ".cache" -type d -exec rm -rf {} + 2>/dev/null || true
+find client/node_modules -name ".cache" -type d -exec rm -rf {} + 2>/dev/null || true
 
-# Install root dependencies with caching
+# Install root dependencies
 echo "📦 Installing root dependencies..."
-npm ci --production=false --no-optional --prefer-offline
+npm install --omit=dev --no-optional --prefer-offline
 
 # Check if client directory exists
 if [ ! -d "client" ]; then
