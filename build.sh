@@ -11,6 +11,11 @@ if [ ! -f "package.json" ]; then
     exit 1
 fi
 
+# Clean up any problematic cache directories
+echo "🧹 Cleaning up cache directories..."
+rm -rf node_modules/.cache 2>/dev/null || true
+rm -rf client/node_modules/.cache 2>/dev/null || true
+
 # Install root dependencies
 echo "📦 Installing root dependencies..."
 npm ci --production=false
@@ -24,7 +29,9 @@ fi
 # Install client dependencies
 echo "📦 Installing client dependencies..."
 cd client
-npm ci --legacy-peer-deps
+rm -rf node_modules/.cache 2>/dev/null || true
+rm -rf package-lock.json 2>/dev/null || true
+npm install --legacy-peer-deps
 
 # Build the React app
 echo "🔨 Building React app..."
