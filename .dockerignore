@@ -20,3 +20,6 @@ coverage
 .cache
 node_modules/.cache
 client/node_modules/.cache
+.npm
+~/.npm
+/tmp/npm-*

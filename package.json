@@ -9,6 +9,7 @@
     "dev": "nodemon server-minimal.js",
     "build": "./build.sh",
     "build:railway": "./build-railway.sh",
+    "build:docker": "./build-docker.sh",
     "heroku-postbuild": "npm run build",
     "railway": "node server-minimal.js"
   },
